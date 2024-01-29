@@ -1,0 +1,66 @@
+{% extends 'student-base.html' %}
+{% load static %}
+{% block title %}Add | Drop Course{% endblock %}
+{% block content %}
+<h1>Course Enrollment</h1>
+
+<div class="row">
+  <div class="col-xl-6 mb-2">
+    {% if available_courses %}
+    <ul class="list-group list-group-light">
+      <h5 class="card-title">Available Courses</h5>
+
+        {% for course in available_courses %}
+        <li class="list-group-item d-flex flex-column align-items-center py-3 ">
+            
+            <div class="text-center">
+                <p class="fw-bold mb-1">{{ course.code }} - {{ course.title }}</p>
+                <p class="text-muted mb-2">{{ course.description }}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                {% for class in course.classes.all %}
+                {% if class.campus.has_active_semester %}
+                  <a class="badge rounded-pill text-danger" href="{% url 'register_course' class.id %}" role="button">{{ class.campus }}</a>
+                  {% endif %}
+                {% endfor %}
+            </div>
+            
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>There are no available courses to register for.</p>
+    {% endif %}
+  </div>
+  
+
+
+
+  <div class="col-xl-6 mb-2">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Registered Courses</h5>
+        {% if registered_courses %}
+        <ul class="list-group">
+          {% for class in registered_courses %}
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-0">{{ class }} </h6>
+              <a class="badge rounded-pill text-danger" href="{% url 'unregister_course' class.id %}" role="button">Drop</a>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>You are not registered for any courses.</p>
+        {% endif %}
+      </div>
+    </div>
+</div>
+
+
+<!-- Main JS File -->
+<script src="{% static 'js/addEle.js' %}"></script>
+
+
+{% endblock %}

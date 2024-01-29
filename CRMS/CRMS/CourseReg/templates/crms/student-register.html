@@ -1,0 +1,50 @@
+{% extends 'student-base.html' %}
+{% load static %}
+{% block title %}Add | Drop Course{% endblock %}
+{% block content %}
+
+      <section class="section dashboard">
+        <div class="row">
+          <div class="wrapper">
+            <div class="form-container">
+              <div class="slide-controls">
+                <input type="radio" name="slide" id="add" checked/>
+                <input type="radio" name="slide" id="drop" />
+                <label for="add" class="slide add">Add</label>
+                <label for="drop" class="slide drop">Drop</label>
+                <div class="slider-tab"></div>
+
+              </div>
+              <div class="form-inner">
+                <form action="#" class="add">
+                  <div class="addSection">
+                    <div class="course-add">
+                      <ul class="add-ul">
+                        <li class="course-li-add">CS103</li>
+                      </ul>
+                    </div>
+                    <div class="addbtn">
+                      <button class="btn-li-add add">Add</button>
+                    </div>
+                  </div>
+                </form>
+                <form action="#" class="drop">
+                  <div class="dropSection nact">
+                    <div class="course-drop">
+                      <ul class="drop-ul">
+                        <li class="course-li-drop">CS103</li>
+                      </ul>
+                    </div>
+                    <div class="addbtn">
+                      <button class="btn-li-drop drop">Drop</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    <!-- Main JS File -->
+    <script src="{% static 'js/addEle.js' %}"></script>
+{% endblock %}

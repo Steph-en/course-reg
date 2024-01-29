@@ -1,0 +1,101 @@
+{% extends 'student-base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+<section class="section dashboard">
+  <div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-8">
+      <div class="row">
+        <!-- Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card sales-card">
+            <div class="card-body">
+              <h5 class="card-title">Assignments</h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-file-text-fill"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>None</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Sales Card -->
+
+        <!-- Revenue Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h5 class="card-title">Courses</h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-menu-button-wide"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ registered_courses|length }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Revenue Card -->
+
+        <!-- Customers Card -->
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
+            <div class="card-body">
+              <h5 class="card-title">Groups</h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-people"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ registered_courses|length }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Customers Card -->
+      </div>
+    </div>
+    <!-- End Left side columns -->
+
+    <!-- Right side columns -->
+    <div class="col-lg-4">
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Courses</h5>
+          {% if registered_courses %}
+          {% for course in registered_courses %}
+          <div class="activity">
+            <div class="activity-item d-flex">
+              <div class="activite-label">{{ course.course.code }}</div>
+              <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+              <div class="activity-content">
+                {{ course.course.title|title }}
+              </div>
+            </div>
+            <!-- End activity item-->
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>Please visit the course enrollment page</p>
+          {% endif %}
+        </div>
+      </div>
+      <!-- End Recent Activity -->
+    </div>
+    <!-- End Right side columns -->
+  </div>
+</section>
+{% endblock %}

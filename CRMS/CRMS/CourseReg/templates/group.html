@@ -1,0 +1,111 @@
+{% extends 'student-base.html' %}
+{% load humanize %}
+{% block title %}{{ group_name }} Group Chat{% endblock %}
+
+{% block content %}
+
+<section class="section dashboard">
+  <div class="container py-1" style='background: inherit; margin: auto;'>
+    <div class="row">
+      <div class="col bg-white">
+        <div id="messages" class="mb-2 p-2" style='overflow-y:scroll; overflow-x:hidden; max-height:60vh;'>
+          <ul id="message-list" class="list-unstyled">
+            {% for message in messages %}
+            {% if message.content %}
+            <li class="d-flex">
+              <div class="card shadow-sm" style="background-color: #f5f6f7;">
+                <div class="card-header d-flex justify-content-between align-items-center p-2" style="background-color: #f5f6f7;">
+                  <p class="fw-bold mb-0">{{ message.sender.get_full_name }}</p>
+                  <p class="text-muted small mb-0 ms-3">about {{ message.timestamp|naturaltime }}</p>
+                </div>
+                <div class="card-body d-flex p-2">
+                  <p class="mb-0">
+                    {{ message.content }}
+                  </p>
+                </div>
+              </div>
+            </li>
+            {% endif %}
+            {% empty %}
+            <div class='text-center'>
+              <h6 class="text-muted small">Send the first message</h6>
+            </div>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="form-outline">
+          <textarea id="message" class="form-control" placeholder="Enter Message" required autocomplete="off"></textarea>
+          <button class="btn btn-info btn-rounded" style='position:relative;' type="button" id="submit" onclick="sendMessage();">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  var messageList = document.getElementById('message-list');
+
+  // Get the last list item
+  var lastListItem = messageList.lastElementChild;
+  if (lastListItem) {
+    lastListItem.scrollIntoView({ block: 'end' });
+  } // Scroll the last list item into view
+
+</script>
+<script>
+  var groupChatSocket = new WebSocket(
+    'ws://{{ request.get_host }}/ws/group/{{ group_id }}/'
+  );
+
+  groupChatSocket.onopen = function (e) {
+    console.log("The connection was set up successfully!");
+  };
+
+  groupChatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    // Handle incoming message, e.g., append it to the chat interface
+    var div = document.createElement("div");
+
+    div.innerHTML = `<li class="d-flex">
+                        <div class="card shadow-sm" style="background-color: #f5f6f7;">
+                            <div class="card-header d-flex justify-content-between align-items-center p-2" style="background-color: #f5f6f7;">
+                              <p class="fw-bold mb-0">${data.sender_name}</p>
+                              <p class="text-muted small mb-0 ms-3">Recently</p>
+                            </div>
+                            <div class="card-body d-flex p-2">
+                              <p class="mb-0">
+                                ${data.message}
+                              </p>
+                            </div>
+                        </div>
+                      </li>`
+
+    document.querySelector("#messages").appendChild(div);
+    console.log("Message Received");
+    div.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
+
+  groupChatSocket.onclose = function (e) {
+    console.log("Something unexpected happened!");
+    // Handle WebSocket close event, e.g., display an error message
+  };
+
+  // Function to send a new message
+  function sendMessage() {
+    var messageInput = document.getElementById("message");
+    var message = messageInput.value;
+
+    groupChatSocket.send(
+      JSON.stringify({
+        sender_name: "{{ request.user.get_full_name }}",
+        sender_id: "{{ request.user.id }}",
+        message: message,
+      })
+    );
+
+    // Clear the message input field after sending the message
+    messageInput.value = "";
+  }
+</script>
+
+{% endblock %}

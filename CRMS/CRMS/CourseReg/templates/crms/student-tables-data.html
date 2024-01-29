@@ -1,0 +1,80 @@
+{% extends 'student-base.html' %}
+{% load static %}
+{% block title %}Add | Drop Course{% endblock %}
+{% block content %}
+<section class="section dashboard">
+  <div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-8">
+      <div class="row">
+        <!-- Reports -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">General <span> Table</span></h5>
+              {% if schedule %}
+              <table class="table ">
+                <thead>
+                  <tr>
+                    <th scope="col">Course</th>
+                    <th scope="col">Lecturer</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for class in schedule %}
+                  <tr>
+                    <td>{{ class}}</td>
+                    <td>{{ class.lecturer }}</td>
+                    <td>{{ class.slot }}</td>
+                    <td>{{ class.room }}</td>
+
+                  </tr>
+                  {% endfor %}
+
+                  {% else %}
+                  <p>Please visit the course enrollment page</p>
+
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Right side columns -->
+    <div class="col-lg-4">
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Courses</h5>
+          {% if registered_courses %}
+          {% for course in registered_courses %}
+          <div class="activity">
+            <div class="activity-item d-flex">
+              <div class="activite-label">{{ course.course.code }}</div>
+              <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+              <div class="activity-content">
+                {{ course.course.title|title }}
+              </div>
+            </div>
+            <!-- End activity item-->
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>Please visit the course enrollment page</p>
+          {% endif %}
+        </div>
+      </div>
+      <!-- End Recent Activity -->
+    </div>
+    <!-- End Right side columns -->
+  </div>
+</section>
+<script src="{% static 'vendor/apexcharts/apexcharts.min.js' %}"></script>
+
+{% endblock %}
